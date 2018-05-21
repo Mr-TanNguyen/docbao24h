@@ -1,6 +1,7 @@
 package com.t3h.buoi10.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.t3h.buoi10.R;
+import com.t3h.buoi10.activity.WebViewActivity;
 import com.t3h.buoi10.adapter.NewsAdapter;
 import com.t3h.buoi10.model.News;
 import com.t3h.buoi10.parser.XMLAsync;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailCaterogyFragment extends Fragment {
+public class DetailCaterogyFragment extends Fragment implements NewsAdapter.OnItemNewsClickListener {
 
     private static final String KEY_CATEROGY_URL = "key_caterogy_url";
     private NewsAdapter adapter;
@@ -57,7 +59,7 @@ public class DetailCaterogyFragment extends Fragment {
 
     private void initViews(View view) {
         adapter = new NewsAdapter(arrNews, getContext());
-
+        adapter.setOnItemNewsClickListener(this);
         rcNews = view.findViewById(R.id.rc_news);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -85,4 +87,12 @@ public class DetailCaterogyFragment extends Fragment {
             }
         }
     };
+
+    @Override
+    public void onClickItemNews(int position) {
+        String link = adapter.getItem(position).getLink();
+        Intent intent = new Intent(getContext(), WebViewActivity.class);
+        intent.putExtra("KEY_LINK_NEWS", link);
+        startActivity(intent);
+    }
 }

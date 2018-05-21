@@ -41,7 +41,7 @@ public class XMLHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         super.endElement(uri, localName, qName);
-        if (news == null){
+        if (news == null) {
             return;
         }
         switch (qName) {
@@ -54,6 +54,11 @@ public class XMLHandler extends DefaultHandler {
                 String desc = value.substring(index + src.length());
                 index = desc.indexOf("\"");
                 String img = desc.substring(0, index);
+                if (!img.contains("http")) {
+                    String origin = "original=\"";
+                    int indexOrigin = desc.indexOf(origin);
+                    img = desc.substring(indexOrigin + origin.length(), desc.indexOf("></a>")).replace("\"", "").trim();
+                }
                 String br = "</br>";
                 index = desc.lastIndexOf(br);
                 desc = desc.substring(index + br.length());
